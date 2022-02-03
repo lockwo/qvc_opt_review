@@ -128,7 +128,7 @@ for size in sizes:
     print(size, depth * 4)
     depth = size
     for method in ops:
-        name = method + str(size)
+        name = method + "_" + str(size)
         results[name] = []
         stds[name] = []
         print(method)
