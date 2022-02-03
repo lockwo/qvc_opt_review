@@ -77,7 +77,7 @@ def f(x, *args):
 
 qs = [cirq.GridQubit(0, i) for i in range(7)]
 X_train, X_test, y_train, y_test = encode(blob_data, blob_labels, qs)
-sizes = [2, 8, 16]
+sizes = [2]
 num_rep = 3
 toler = 1e-4
 depth = 4
