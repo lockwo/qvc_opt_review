@@ -112,40 +112,6 @@ max_iter = 1000
 sizes = [20, 25]
 inputs = tfq.convert_to_tensor([cirq.Circuit()])
 
-ops = ["Nelder-Mead", "Powell", "CG", "BFGS", "L-BFGS-B", "TNC", "COBYLA", "SLSQP", "trust-constr", "SPSA"]
-
-results = dict()
-stds = dict()
-
-for size in sizes:
-    qu = size
-    print(size, qu * layers * 2)
-    for method in ops:
-        name = method + "_" + str(size)
-        results[name] = []
-        stds[name] = []
-        print(size, method)
-        error = 0
-        errors = []
-        for n in range(num_rep):
-            h, h_w = create_hamil(decomp, qu)
-            vqe = create_vqe(h, h_w, layers, qu)
-            if method == "SPSA":
-                ret = minimizeSPSA(f, x0=np.random.uniform(0, 2 * np.pi, qu * layers * 2), args=(vqe, inputs), niter=max_iter, paired=False)
-            else:
-                ret = minimize(f, x0=np.random.uniform(0, 2 * np.pi, qu * layers * 2), args=(vqe, inputs), method=method, tol=toler, options={"maxiter" : max_iter})
-            final = ret['fun']
-            error += final
-            errors.append(final)
-        results[name].append(error/num_rep)
-        stds[name].append(np.std(errors))
-        for key, value in results.items():
-            print(key, value, stds[key])
-
-
-for key, value in results.items():
-    print(key, value, stds[key])
-
 grad_ops = [tf.keras.optimizers.Adam(), tf.keras.optimizers.Adam(amsgrad=True), tf.keras.optimizers.Adadelta(), tf.keras.optimizers.Adagrad(), \
     tf.keras.optimizers.Adamax(), tf.keras.optimizers.Ftrl(), tf.keras.optimizers.Nadam(), tf.keras.optimizers.RMSprop(), tf.keras.optimizers.SGD()]
 names = ["Adam", "AMSGrad", "Adadelta", "Adagrad", "Adamax", "Ftrl", "Nadam", "RMSProp", "SGD"]
