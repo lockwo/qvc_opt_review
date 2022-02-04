@@ -9,3 +9,7 @@ All the results are available in the `results.txt` organized by task, score, and
 ## Open Call For Research
 
 Check out the [CONTRIBUTING.md](https://github.com/lockwo/qvc_opt_review/blob/main/CONTRIBUTING.md) and take on one of the issues (or make your own). For more information, see the video: 
+
+## Funding
+
+This work was generoulsy supported by [Spell](https://spell.ml/) and their [Open Research Grant](https://spell.ml/blog/full-grant-recipient-YPcM3hUAACUAy4px)
