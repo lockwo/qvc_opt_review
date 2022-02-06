@@ -8,7 +8,7 @@ All the results are available in the `results.txt` organized by task, score, and
 
 ## Open Call For Research
 
-Check out the [CONTRIBUTING.md](https://github.com/lockwo/qvc_opt_review/blob/main/CONTRIBUTING.md) and take on one of the issues (or make your own). For more information, see the video: 
+Check out the [CONTRIBUTING.md](https://github.com/lockwo/qvc_opt_review/blob/main/CONTRIBUTING.md) and take on one of the issues (or make your own). For more information, see the video: https://www.youtube.com/watch?v=JSG5zSuSyKA
 
 ## Funding
 
