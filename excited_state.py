@@ -94,7 +94,8 @@ def make_model():
     excitation_input = tf.keras.Input(shape=(), dtype=tf.dtypes.string)
     cluster_state = tfq.layers.AddCircuit()(excitation_input, prepend=cluster_state_circuit(cluster_state_bits))
 
-    quantum_model = tfq.layers.PQC(create_model_circuit(cluster_state_bits),readout_operators)(cluster_state)
+    quantum_model = tfq.layers.PQC(create_model_circuit(cluster_state_bits), readout_operators, repetitions=1000, differentiator=tfq.differentiators.ParameterShift())(cluster_state)
+    #quantum_model = tfq.layers.NoisyPQC(create_model_circuit(cluster_state_bits), readout_operators, repetitions=1000, sample_based=True, differentiator=tfq.differentiators.ParameterShift())(inputs)
 
     qcnn_model = tf.keras.Model(inputs=[excitation_input], outputs=[quantum_model])
     return qcnn_model
