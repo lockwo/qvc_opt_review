@@ -85,7 +85,7 @@ def create_model_circuit(qubits):
     model_circuit += quantum_pool_circuit(qubits[4:6], qubits[6:], symbols[36:42])
     model_circuit += quantum_conv_circuit(qubits[6:], symbols[42:57])
     model_circuit += quantum_pool_circuit([qubits[6]], [qubits[7]], symbols[57:63])
-    model_circuit.with_noise(cirq.depolarize(p=0.01))
+    model_circuit = model_circuit.with_noise(cirq.depolarize(p=0.01))
     return model_circuit
 
 def make_model():
