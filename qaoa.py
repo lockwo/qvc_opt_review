@@ -32,7 +32,7 @@ def make_circuit(nodes, p, g):
     for i in range(p):
         qaoa_circuit += cost_hamiltonian(qs, g, qaoa_parameters[2 * i])
         qaoa_circuit += mixing_hamiltonian(qs, qaoa_parameters[2 * i + 1])
-    #qaoa_circuit.with_noise(cirq.depolarize(p=0.01))
+    qaoa = qaoa_circuit.with_noise(cirq.depolarize(p=0.01))
     return qaoa_circuit
 
 def cc(qubits, g):
