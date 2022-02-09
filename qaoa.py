@@ -46,6 +46,7 @@ def create_qaoa(g, p, nodes):
     cost = cc(qs, g)
     ins = tf.keras.layers.Input(shape=(), dtype=tf.dtypes.string)
     outs = tfq.layers.PQC(make_circuit(nodes, p, g), cost, repetitions=1000, differentiator=tfq.differentiators.ParameterShift())(ins)
+    #layer1 = tfq.layers.NoisyPQC(model_circuit(nodes, p, g), cost, repetitions=1000, sample_based=True, differentiator=tfq.differentiators.ParameterShift())(inputs)
     qaoa = tf.keras.models.Model(inputs=ins, outputs=outs)
     return qaoa
 
