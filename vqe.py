@@ -37,7 +37,7 @@ def hamiltonian(circuit, qubits, ham):
 def make_vqe(qubits, layers, parameters, ham):
     circuit = ansatz(cirq.Circuit(), qubits, layers, parameters)
     circuit = hamiltonian(circuit, qubits, ham)
-    circuit.with_noise(cirq.depolarize(p=0.01))
+    circuit = circuit.with_noise(cirq.depolarize(p=0.01))
     return circuit
 
 def prod(iterable):
