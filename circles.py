@@ -44,7 +44,7 @@ def model_circuit(qubits, depth):
     params = sympy.symbols("q0:%d"%num_params)
     for i in range(depth):
         cir = layer(cir, qubits, params[i * 4:i * 4 + 4])
-    cir.with_noise(cirq.depolarize(p=0.01))
+    cir = cir.with_noise(cirq.depolarize(p=0.01))
     return cir
 
 def create_model(qs, d):
