@@ -71,6 +71,7 @@ class VQE(tf.keras.layers.Layer):
         super(VQE, self).__init__()
         self.w = tf.Variable(np.random.uniform(0, np.pi, (1, num_weights)), dtype=tf.float32)
         self.layers = [tfq.layers.ControlledPQC(circuits[i], ops[i], repetitions=1000, differentiator=tfq.differentiators.ParameterShift()) \
+        #self.layers = [tfq.layers.NoisyControlledPQC(circuits[i], ops[i], repetitions=1000, sample_based=True, differentiator=tfq.differentiators.ParameterShift()) \
             for i in range(len(circuits))]
 
     def call(self, input):
