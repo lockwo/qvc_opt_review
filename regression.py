@@ -53,6 +53,7 @@ def create_model(qs, d):
     readout_operators = [cirq.Z(qs[0])]
     inputs = tf.keras.Input(shape=(), dtype=tf.dtypes.string)
     layer1 = tfq.layers.PQC(c, readout_operators, repetitions=1000, differentiator=tfq.differentiators.ParameterShift())(inputs)
+    #layer1 = tfq.layers.NoisyPQC(c, readout_operators, repetitions=1000, sample_based=True, differentiator=tfq.differentiators.ParameterShift())(inputs)
     vqc = tf.keras.models.Model(inputs=inputs, outputs=layer1)
     return vqc
 
