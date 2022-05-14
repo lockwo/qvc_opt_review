@@ -6,7 +6,7 @@ import numpy as np
 import networkx as nx
 from scipy.optimize import minimize
 from noisyopt import minimizeSPSA
-
+from qiskit.algorithms.optimizers import NFT
 
 def mixing_hamiltonian(qubits, par):
     c = cirq.Circuit()
@@ -32,7 +32,7 @@ def make_circuit(nodes, p, g):
     for i in range(p):
         qaoa_circuit += cost_hamiltonian(qs, g, qaoa_parameters[2 * i])
         qaoa_circuit += mixing_hamiltonian(qs, qaoa_parameters[2 * i + 1])
-    qaoa = qaoa_circuit.with_noise(cirq.depolarize(p=0.01))
+    #qaoa_circuit.with_noise(cirq.depolarize(p=0.01))
     return qaoa_circuit
 
 def cc(qubits, g):
@@ -46,7 +46,6 @@ def create_qaoa(g, p, nodes):
     cost = cc(qs, g)
     ins = tf.keras.layers.Input(shape=(), dtype=tf.dtypes.string)
     outs = tfq.layers.PQC(make_circuit(nodes, p, g), cost, repetitions=1000, differentiator=tfq.differentiators.ParameterShift())(ins)
-    #layer1 = tfq.layers.NoisyPQC(model_circuit(nodes, p, g), cost, repetitions=1000, sample_based=True, differentiator=tfq.differentiators.ParameterShift())(inputs)
     qaoa = tf.keras.models.Model(inputs=ins, outputs=outs)
     return qaoa
 
@@ -79,9 +78,11 @@ num_rep = 3
 toler = 1e-4
 depth = 4
 
-ops = ["Nelder-Mead", "Powell", "CG", "BFGS", "L-BFGS-B", "TNC", "COBYLA", "SLSQP", "trust-constr", "SPSA"]
+ops = ["NFT", "Nelder-Mead", "Powell", "CG", "BFGS", "L-BFGS-B", "TNC", "COBYLA", "SLSQP", "trust-constr", "SPSA"]
 results = dict()
 stds = dict()
+
+nft_opt = NFT(maxiter=1000)
 
 for size, graph in enumerate(graphs):
     for method in ops:
@@ -93,9 +94,15 @@ for size, graph in enumerate(graphs):
         errors = []
         for _ in range(num_rep):
             qaoa = create_qaoa(graph, depth, len(graph.nodes()))
+            def nf(x):
+                qaoa.set_weights([x])
+                return qaoa(inputs).numpy()[0][0]
+            if method == "NFT":
+                ret_q = nft_opt.minimize(nf, x0=np.random.uniform(0, 2 * np.pi, depth * 2))
+                ret = {'fun' : ret_q.fun}
             if method == "SPSA":
                 ret = minimizeSPSA(f, x0=np.random.uniform(0, 2 * np.pi, depth * 2), args=(qaoa, inputs), niter=max_iter, paired=False)
-            else:
+            elif method != "NFT":
                 ret = minimize(f, x0=np.random.uniform(0, 2 * np.pi, depth * 2), args=(qaoa, inputs), method=method, tol=toler, options={"maxiter" : max_iter})
             final = ret['fun']
             error += final
